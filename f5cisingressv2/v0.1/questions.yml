@@ -36,7 +36,6 @@ questions:
 - variable: ingress.annotations.healthprotocol
   default: "gateway_icmp"
   description: "设置F5 Virual Server Health check健康检查类型"
-  default: "gatewap_icmp"
   type: enum
   required: true
   label: Config F5 Virual Server Health
