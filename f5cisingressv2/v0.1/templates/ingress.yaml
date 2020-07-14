@@ -5,13 +5,6 @@
 {{- $vsPort := .Values.ingress.annotations.virtualserverhttpport -}}
 {{- $vsPartition := .Values.ingress.annotations.partition -}}
 {{- $vsBalance := .Values.ingress.annotations.balance -}}
-{{- if . 
-{{- $vsHealth := .Values.ingress.annotations.gateway_icmp -}}
-
-{{- $vsHealth := .Values.ingress.annotations.health -}}
-
-{{- $vsHealth := .Values.ingress.annotations.health -}}
-
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
@@ -28,30 +21,30 @@ metadata:
     virtual-server.f5.com/http-port: "{{ $vsPort }}"
     virtual-server.f5.com/partition: "{{ $vsPartition }}"
     virtual-server.f5.com/balance: "{{ $vsBalance }}"
-    {{- if eq .Values.ingress.annotations.health-protocol "gateway_icmp" }}
-    virtual-server.f5.com/health:  |
-       [
-        {
-          "interval": 5,
-          "timeout":  10
-        }
-      ]
-    {{- else if eq .Values.ingress.annotations.health-protocol "tcp" }}
+    {{- if eq .Values.ingress.annotations.healthprotocol "gateway_icmp" }}
     virtual-server.f5.com/health: |
        [
         {
           "interval": 5,
-          "timeout":  10
+          "timeout":  16
         }
       ]
-    {{- else if eq .Values.ingress.annotations.health-protocol "http" }}
+    {{- else if eq .Values.ingress.annotations.healthprotocol "tcp" }}
+    virtual-server.f5.com/health: |
+       [
+        {
+          "interval": 5,
+          "timeout":  16
+        }
+      ]
+    {{- else if eq .Values.ingress.annotations.healthprotocol "http" }}
     virtual-server.f5.com/health: |
        [
         {
           "path":     "/",
           "send":     "HTTP GET /",
           "interval": 5,
-          "timeout":  10
+          "timeout":  16
         }
       ]
     {{- else if eq .Values.ingress.annotations.health-protocol "https" }}
@@ -61,7 +54,7 @@ metadata:
           "path":     "/",
           "send":     "HTTP GET /",
           "interval": 5,
-          "timeout":  10
+          "timeout":  16
         }
       ]
     {{- end }}

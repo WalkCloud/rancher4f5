@@ -5,6 +5,13 @@ labels:
   io.cattle.role: project
   io.rancher.certified: partner
 questions:
+- variable: ingress.annotations.virtualservername
+  default: "default vs name"
+  required: true
+  description: "设置F5提供负载均衡的Virtual Server名称"
+  type: string
+  label: Config F5 Virual Server Name
+  group: "F5 Virtual Server"
 - variable: ingress.annotations.virtualserverip
   default: "controller-default"
   required: true
@@ -26,7 +33,7 @@ questions:
   type: string
   label: Config F5 Partition to use
   group: "F5 Virtual Server"
-- variable: ingress.annotations.health_type
+- variable: ingress.annotations.healthprotocol
   default: "gateway_icmp"
   description: "设置F5 Virual Server Health check健康检查类型"
   default: "gatewap_icmp"
@@ -44,20 +51,25 @@ questions:
   description: "设置F5 Virtual Server负载均衡类型"
   type: enum
   required: true
-  label: F5 VS Balance 
+  label: F5 pool loadbalance method 
   group: "F5 Virtual Server"
   options:
   - "round-robin"
   - "least-connections-node"
   - "fastest-node"
   - "ratio-member"
-- variable: ingress.annotations.partition
-  default: "k8s"
+- variable: ingress.annotations.persistence
+  default: ""
   required: true
-  description: "设置F5分区信息, 例如:common等"
-  type: string
-  label: Config F5 Partition to use
+  description: "设置F5会话保持策略"
+  type: enum
+  label: F5 Sessions Persistence Policy
   group: "F5 Virtual Server"
+  options:
+  - "cookie"
+  - "host"
+  - "destination-address-affinity"
+  - "ssl"  
 - variable: ingress.hosts.host
   default: "demo.rancher.com"
   required: true

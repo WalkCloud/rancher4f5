@@ -14,6 +14,9 @@ nameOverride: ""
 fullnameOverride: ""
 ingressnameOverride: ""
 
+metadata:
+  name: demo
+
 service:
   type: ClusterIP
   serviceName: nginx
@@ -27,7 +30,7 @@ ingress:
     virtualserverhttpport: 80
     partition: Rancher
     balance: round-robin
-    health-protocol: gateway_icmp
+    healthprotocol: gateway_icmp
 
   hosts:
     host: demo.rancher.com
