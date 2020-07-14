@@ -59,7 +59,7 @@ questions:
   - "fastest-node"
   - "ratio-member"
 - variable: ingress.annotations.persistence
-  default: ""
+  default: "cookie"
   required: true
   description: "设置F5会话保持策略"
   type: enum
